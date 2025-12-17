@@ -1,64 +1,97 @@
-const regExp = /^\d+$/;
-const containsOnly = (str) => {
-    return regExp.test(str);
-}
+// ЗАДАНИЕ 1
+const inputField = document.getElementById('userInput');
+const button = document.getElementById('numers');
+const resultDisplay = document.getElementById('result');
+const extractNumbers = (str) => {
+    const matches = str.match(/\d/g);
+    return matches ? matches.map(Number) : [];
+};
+button.addEventListener('click', () => {
+    const text = inputField.value;
+    const numbersArray = extractNumbers(text);
+    resultDisplay.textContent = JSON.stringify(numbersArray);
+    console.log(numbersArray);
+});
 
-console.log(containsOnly("12345"));
-console.log(containsOnly("12a45"));
-console.log(containsOnly(""));
-console.log(containsOnly("0"));
-// test 2
-
-const startSecond = () => {
-    const intervalID = setInterval(() => {
-        console.log("Прошла секунда");
+// ЗАДАНИЕ 2
+const printFibonacci = (a = 0, b = 1) => {
+    console.log(a);
+    if (a >= 144) {
+        return; 
+    }
+    setTimeout(() => {
+        printFibonacci(b, a + b);
     }, 1000);
-    return intervalID;
 };
+printFibonacci();
 
-console.log("Счетчик запущен.");
-const counterId = startSecond();
-
-// test 3
-
-const count = () => {
-    let i = 1;
-    const interval = setInterval(() => {
-        console.log(i);
-        i++;
-        if (i > 10) {
-            clearInterval(interval);
+// ЗАДАНИЕ 3
+const fetchProductTitles = async () => {
+    try {
+        const response = await fetch('https://fakestoreapi.com/products');
+        if (!response.ok) {
+            throw new Error(`Ошибка сервера: ${response.status}`);
         }
-     }, 1000);
+        const data = await response.json();
+        data.forEach(product => {
+            console.log(product.title);
+        });
+    } catch (error) {
+    console.error('Ошибка:', error.message);
+    }
 };
-count();
+fetchProductTitles();
 
-// test 4
-const colorBlock = document.getElementById('block');
-
-const activeClass = 'background';
-
-colorBlock.addEventListener('click', () => {
-    colorBlock.classList.toggle(activeClass);
-    if (colorBlock.classList.contains(activeClass)) {
-        console.log("Фон установлен.");
-    } else {
-        console.log("Фон убран.");
+// ЗАДАНИЕ 4
+const container = document.querySelector('div');
+container.addEventListener('click', (event) => {
+    if (event.target.tagName === 'BUTTON') {
+        const color = event.target.textContent;
+        document.body.style.backgroundColor = color;
+        console.log(`Цвет изменен на: ${color}`);
     }
 });
 
-// test 5
-
-const request = new XMLHttpRequest();
-
-request.open("GET", "add.json", true);
-request.onload = function () {
-    if (request.status === 200) {
-        const data = JSON.parse(request.responseText);
-        console.log("Данные получены:");
-        console.log(data);
+// ЗАДАНИЕ 5
+const toggleBtn = document.getElementById('toggleBtn');
+const square = document.getElementById('square');
+toggleBtn.addEventListener('click', () => {
+    if (square.style.display === 'none') {
+        square.style.display = 'block';
     } else {
-        console.error("Ошибка загрузки ", request.status);
+        square.style.display = 'none'; 
+    }
+});
+
+// ЗАДАНИЕ 6
+const counterElement = document.getElementById('counter');
+let count = 0;
+    const intervalId = setInterval(() => {
+    count++;
+    counterElement.textContent = count;
+    if (count >= 100) {
+        clearInterval(intervalId);
+        console.log("Завершено");
+    }
+}, 1);
+
+// ЗАДАНИЕ 7
+const jsonBtn = document.getElementById('getJsonBtn');
+const fetchBleachCharacters = async () => {
+    try {
+        const response = await fetch('add.json');
+        if (!response.ok) {
+            throw new Error('Файл json не найде');
+        }
+        const characters = await response.json();
+        console.log("--- Список персонажей получен ---");
+        characters.forEach(char => {
+            console.log(`${char.id} | ${char.name}`);
+            console.log(`${char.house}`);
+            console.log(`${char.specialty}`);
+        });
+    } catch (error) {
+        console.error("Error:", error.message);
     }
 };
-request.send();
+jsonBtn.addEventListener('click', fetchBleachCharacters);
