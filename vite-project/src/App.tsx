@@ -1,10 +1,10 @@
-import MyInfo from './MyInfo';
+import UserList from './UserList';
 
 function App() {
   return (
-    <div style={{ textAlign: 'center', padding: '50px' }}>
-      <h1>Контрольная работа выполнена</h1>
-      <MyInfo />
+    <div>
+      <h1>Список пользователей</h1>
+      <UserList />
     </div>
   );
 }
